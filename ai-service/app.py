@@ -9,9 +9,24 @@ def home():
 
 @app.route("/test")
 def test():
-    result = generate_response("Explain AI in simple words")
-    return result
+    try:
+        prompt = "Explain AI in simple words"
+        result = generate_response(prompt)
+
+        return {
+            "status": "success",
+            "data": {
+                "prompt": prompt,
+                "response": result
+            },
+            "message": "Response generated successfully"
+        }
+
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }, 500
 
 if __name__ == "__main__":
     app.run(debug=True)
-    
