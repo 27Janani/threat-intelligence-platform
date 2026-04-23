@@ -1,4 +1,15 @@
-.env
-__pycache__/
 *.pyc
+
+# Java
+target/
+*.class
+
+# Python
 venv/
+__pycache__/
+
+# Env
+.env
+
+# IDE
+.vscode/
