@@ -24,33 +24,44 @@ def rate_limit_handler(e):
 def home():
     return "AI Service Running"
 
-@app.route("/test")
+from flask import request
+
+from flask import request
+
+@app.route("/test", methods=["POST"])
 @limiter.limit("30 per minute")
 def test():
     try:
-        prompt = "Explain AI in simple words"
+        #  Get JSON data from user
+        data = request.get_json()
 
-        # Sanitize input
+        prompt = data.get("prompt", "") if data else ""
+
+        #  Sanitize input
         clean_prompt, error = sanitize_input(prompt)
 
         if error:
-            return {
+            return jsonify({
                 "status": "error",
                 "message": error
-            }, 400
+            }), 400
 
-        result = generate_response(clean_prompt)
+        #  Call AI
+        response = generate_response(clean_prompt)
 
-        return {
+        return jsonify({
             "status": "success",
             "data": {
                 "prompt": clean_prompt,
-                "response": result
+                "response": response
             }
-        }
+        })
 
     except Exception as e:
-        return {"status": "error", "message": str(e)}, 500
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
