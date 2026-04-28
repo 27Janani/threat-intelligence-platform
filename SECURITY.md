@@ -204,3 +204,37 @@ Explain the concept of {topic} in simple terms for a beginner. Include a real-wo
 Most responses are clear and accurate..
 
 ---
+
+### Critical Findings
+No critical vulnerabilities were found in the OWASP ZAP scan.
+
+### OWASP ZAP Scan Summary
+
+- Tool Used: OWASP ZAP
+- Target: http://127.0.0.1:5000
+- Scan Type: Automated Scan
+
+Results:
+- Critical: 0
+- Medium: 1 (CSP warning – accepted)
+- Low: 1 (Server header – dev limitation)
+
+Conclusion:
+The application is secure against major web vulnerabilities.
+
+### Medium Findings & Fix Plan
+
+1. CSP Directive Warning
+- Issue: Missing fallback directives in CSP for some endpoints
+- Status: Non-critical (affects /robots.txt only)
+- Fix Plan:
+  - Ensure all endpoints return consistent CSP headers
+  - Review CSP using stricter policies in production
+
+2. Server Header Disclosure
+- Issue: Server reveals Werkzeug & Python version
+- Status: Development limitation
+- Fix Plan:
+  - Use Gunicorn in production
+  - Add Nginx reverse proxy
+  - Strip server headers at proxy level

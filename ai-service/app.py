@@ -63,5 +63,33 @@ def test():
             "message": str(e)
         }), 500
 
+@app.after_request
+def secure_headers(response):
+    # Strong CSP
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self'; "
+        "img-src 'self' data:; "
+        "object-src 'none'; "
+        "frame-ancestors 'none'; "
+        "form-action 'self'; "
+        "base-uri 'self';"
+    )
+
+    # Anti-clickjacking
+    response.headers["X-Frame-Options"] = "DENY"
+
+    # MIME sniffing protection
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    # XSS protection
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+
+    # Remove server info
+    response.headers.pop("Server", None)
+
+    return response
+
 if __name__ == "__main__":
     app.run(debug=True)
