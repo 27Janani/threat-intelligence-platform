@@ -4,6 +4,9 @@ from middleware.input_sanitizer import sanitize_input
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask import jsonify
+from flask import request
+
+VALID_TOKEN = "secure-token-123"
 
 app = Flask(__name__)
 
@@ -24,14 +27,19 @@ def rate_limit_handler(e):
 def home():
     return "AI Service Running"
 
-from flask import request
-
-from flask import request
 
 @app.route("/test", methods=["POST"])
 @limiter.limit("30 per minute")
 def test():
     try:
+        auth_header = request.headers.get("Authorization")
+
+        if not auth_header or auth_header != f"Bearer {VALID_TOKEN}":
+            return jsonify({
+                "status": "error",
+                "message": "Unauthorized access"
+            }), 401
+
         #  Get JSON data from user
         data = request.get_json()
 

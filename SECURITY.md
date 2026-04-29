@@ -238,3 +238,46 @@ The application is secure against major web vulnerabilities.
   - Use Gunicorn in production
   - Add Nginx reverse proxy
   - Strip server headers at proxy level
+
+
+## Unit Testing (Day 8)
+
+- Implemented 8 pytest test cases
+- Covered:
+  - Valid input handling
+  - Empty and missing inputs
+  - SQL injection rejection
+  - Prompt injection detection
+  - Mocked AI responses
+  - API failure handling
+- Ensured consistent response format and error handling
+
+### Day 9
+
+### JWT Authentication
+- Implemented token-based authentication using Authorization header
+- Only requests with valid token are allowed
+- Unauthorized access returns HTTP 401
+- Tested:
+  - No token → Rejected
+  - Invalid token → Rejected
+  - Valid token → Accepted
+
+### Rate Limiting
+- Implemented rate limiting using Flask-Limiter (30 requests/minute)
+- Prevents API abuse and excessive usage
+- Verified:
+  - Normal requests → Allowed
+  - Excess requests → Blocked with 429 error
+
+- HTML/script inputs are rejected instead of sanitized to prevent execution risks
+
+## PII Protection
+
+- Implemented detection for sensitive data:
+  - Phone numbers
+  - Email addresses
+  - Aadhaar-like IDs
+  - Credit card-like numbers
+- Requests containing PII are rejected with error response
+- Ensures compliance with data privacy best practices
